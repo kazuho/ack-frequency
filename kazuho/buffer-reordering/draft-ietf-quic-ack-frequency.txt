@@ -5,10 +5,10 @@
 QUIC                                                          J. Iyengar
 Internet-Draft                                                    Fastly
 Intended status: Standards Track                                I. Swett
-Expires: 20 November 2025                                         Google
+Expires: 23 November 2025                                         Google
                                                             M. Kühlewind
                                                                 Ericsson
-                                                             19 May 2025
+                                                             22 May 2025
 
 
                      QUIC Acknowledgment Frequency
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 November 2025.
+   This Internet-Draft will expire on 23 November 2025.
 
 Copyright Notice
 
@@ -380,16 +380,16 @@ Table of Contents
       received.
 
    An endpoint that receives an ACK_FREQUENCY frame with a non-zero
-   Reordering Threshold value SHOULD send an immediate ACK when the gap
-   between the smallest Unreported Missing packet and the Largest
-   Unacked is greater than or equal to the Reordering Threshold value.
-   Sending this additional ACK will reset the max_ack_delay timer and
-   Ack-Eliciting Threshold counter (as any ACK would do).
+   Reordering Threshold value SHOULD send an immediate ACK whenever it
+   observes unacknowledged state that lies outside of its configured
+   Reordering Threshold, i.e.: * when the difference between the
+   smallest Unreported Missing packet and the Largest Unacked packet
+   becomes greater than or equal to the Reordering Threshold value; or *
+   when the endpoint receives an ack-eliciting packet whose packet
+   number is less than Largest Acked - Reordering Threshold.
 
-   Conversely, when the out-of-order packet being received is within the
-   Reordering Threshold, the endpoint SHOULD withhold sending an ACK
-   until the delayed ACK timer expires or other thresholds reach their
-   limits.
+   Sending such an additional ACK resets the max_ack_delay timer and the
+   Ack-Eliciting Threshold counter, as any ACK would.
 
    See Section 6.2.1 for examples explaining this behavior.  See
    Section 6.3 for guidance on how to choose the reordering threshold
